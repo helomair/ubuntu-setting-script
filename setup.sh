@@ -12,7 +12,18 @@ fi
 
 # Install packages
 echo "Installing packages"
-$SUDO apt install git vim tmux zsh powerline fonts-powerline build-essential python3-dev php curl
+$SUDO apt install git 
+$SUDO apt install vim
+$SUDO apt install tmux 
+$SUDO apt install zsh
+$SUDO apt install powerline
+$SUDO apt install fonts-powerline
+$SUDO apt install build-essential
+$SUDO apt install python3-dev
+$SUDO apt install php
+$SUDO apt install curl
+$SUDO apt install docker
+$SUDO apt install fzf
 
 # Move to HOME
 cd ~
@@ -25,6 +36,7 @@ fi
 
 # Copy configs to HOME
 cp -a ~/ubuntu_settings_backup/. ~
+rm -rf .git
 
 # Setup vim
 echo "Start setup vim"
@@ -41,7 +53,7 @@ ln -s -f .tmux/.tmux.conf
 
 echo "Start setup zsh, using oh-my-zsh."
 $SUDO sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-if [ -f "~/.zshrc.pre-oh-my-zsh" ]; then
+if [ -f ".zshrc.pre-oh-my-zsh" ]; then
     rm .zshrc
     mv .zshrc.pre-oh-my-zsh .zshrc
 fi
