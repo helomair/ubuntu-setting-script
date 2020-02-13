@@ -12,7 +12,7 @@ fi
 
 # Install packages
 echo "Installing packages"
-$SUDO apt install git vim tmux zsh powerline fonts-powerline build-essential cmake3 python3-dev php
+$SUDO apt install git vim tmux zsh powerline fonts-powerline build-essential python3-dev php curl
 
 # Move to HOME
 cd ~
