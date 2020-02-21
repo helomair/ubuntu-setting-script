@@ -47,15 +47,17 @@ $SUDO vim +PlugInstall +qall
 cd ~/.vim/bundle/YouCompleteMe 
 ./install.sh --clang-completer
 
+cd ~
+
 echo "Start setup tmux, using oh-my-tmux."
-cp ~/ubuntu_settings_backup/.tmux.conf.local ~/.tmux.conf.local
 git clone https://github.com/gpakosz/.tmux.git
 ln -s -f .tmux/.tmux.conf
+cp ~/ubuntu_settings_backup/.tmux.conf.local ~/.tmux.conf.local
+
 
 echo "Start setup zsh, using oh-my-zsh."
 $SUDO sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
-exec /bin/zsh
-
 cp ~/ubuntu_settings_backup/.zshrc ~/.zshrc 
 source ~/.zshrc 
+exec /bin/zsh
