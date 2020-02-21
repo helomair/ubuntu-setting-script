@@ -12,18 +12,20 @@ fi
 
 # Install packages
 echo "Installing packages"
-$SUDO apt install git 
-$SUDO apt install vim
-$SUDO apt install tmux 
-$SUDO apt install zsh
-$SUDO apt install powerline
-$SUDO apt install fonts-powerline
-$SUDO apt install build-essential
-$SUDO apt install python3-dev
-$SUDO apt install php
-$SUDO apt install curl
-$SUDO apt install docker
-$SUDO apt install fzf
+$SUDO apt install -y git 
+$SUDO apt install -y vim
+$SUDO apt install -y tmux 
+$SUDO apt install -y zsh
+$SUDO apt install -y powerline
+$SUDO apt install -y fonts-powerline
+$SUDO apt install -y build-essential
+$SUDO apt install -y python3-dev
+$SUDO apt install -y php
+$SUDO apt install -y curl
+$SUDO apt install -y docker
+$SUDO apt install -y cmake
+$SUDO apt install -y exuberant-ctags
+# $SUDO apt install fzf
 
 # Move to HOME
 cd ~
@@ -34,26 +36,26 @@ if [ ! -d "~/ubuntu_settings_backup" ]; then
     git clone https://github.com/Helomair/ubuntu_settings_backup.git
 fi
 
-# Copy configs to HOME
-cp -a ~/ubuntu_settings_backup/. ~
-rm -rf .git
-
 # Setup vim
 echo "Start setup vim"
+cp ~/ubuntu_settings_backup/.vimrc ~/.vimrc
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-# For vim Plugin tagbar
-$SUDO apt install exuberant-ctags
-
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim 
 $SUDO vim +PlugInstall +qall
 
+# Compile Plugin YouCompleteMe 
+cd ~/.vim/bundle/YouCompleteMe 
+./install.sh --clang-completer
+
 echo "Start setup tmux, using oh-my-tmux."
+cp ~/ubuntu_settings_backup/.tmux.conf.local ~/.tmux.conf.local
 git clone https://github.com/gpakosz/.tmux.git
 ln -s -f .tmux/.tmux.conf
 
 echo "Start setup zsh, using oh-my-zsh."
 $SUDO sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-if [ -f ".zshrc.pre-oh-my-zsh" ]; then
-    rm .zshrc
-    mv .zshrc.pre-oh-my-zsh .zshrc
-fi
+
+exec /bin/zsh
+
+cp ~/ubuntu_settings_backup/.zshrc ~/.zshrc 
+source ~/.zshrc 
