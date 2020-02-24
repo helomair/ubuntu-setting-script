@@ -22,10 +22,10 @@ $SUDO apt install -y build-essential
 $SUDO apt install -y python3-dev
 $SUDO apt install -y php
 $SUDO apt install -y curl
-$SUDO apt install -y docker
+$SUDO apt install -y docker.io
 $SUDO apt install -y cmake
 $SUDO apt install -y exuberant-ctags
-# $SUDO apt install fzf
+$SUDO apt install -y fzf
 
 # Move to HOME
 cd ~
@@ -56,7 +56,8 @@ cp ~/ubuntu_settings_backup/.tmux.conf.local ~/.tmux.conf.local
 
 
 echo "Start setup zsh, using oh-my-zsh."
-$SUDO sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+curl -Lo install.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+sh install.sh
 
 cp ~/ubuntu_settings_backup/.zshrc ~/.zshrc 
 source ~/.zshrc 
