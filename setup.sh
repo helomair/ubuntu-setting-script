@@ -31,7 +31,8 @@ echo "Start setup vim"
 cp ~/ubuntu_settings_backup/.vimrc ~/.vimrc
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-$SUDO vim +PlugInstall +qall
+vim --cmd 'source ~/.vimrc' -c 'qa!'
+vim --cmd 'PlugInstall' -c 'qa!'
 
 # Compile Plugin YouCompleteMe
 cd ~/.vim/bundle/YouCompleteMe
@@ -47,7 +48,8 @@ ln -s ~/nvim.appimage /usr/bin/nvim
 
 ## bob, nvim version manager
 curl https://sh.rustup.rs -sSf | sh
-argo install --git https://github.com/MordechaiHadad/bob.git
+source "$HOME/.cargo/env"
+cargo install --git https://github.com/MordechaiHadad/bob.git
 bob install nightly
 bob use nightly
 
@@ -102,5 +104,5 @@ sh install.sh
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 
 cp ~/ubuntu_settings_backup/.zshrc ~/.zshrc
-source ~/.zshrc
+# source ~/.zshrc
 exec /bin/zsh
