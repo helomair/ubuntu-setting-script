@@ -15,7 +15,7 @@ echo "Installing packages"
 $SUDO apt update
 $SUDO apt install -y git vim tmux zsh powerline fonts-powerline build-essential curl make gcc g++ clang zoxide ripgrep fd-find yarn lldb python3-pip python3-venv
 $SUDO apt install -y python3-dev docker.io cmake exuberant-ctags fzf ninja-build gettext unzip
-$SUDO apt install -y php8.1 php8.1-dev php8.1-gd php8.1-mbstring php8.1-xml php8.1-curl php8.1-mysql
+$SUDO apt install -y php8.1 php8.1-dev php8.1-gd php8.1-mbstring php8.1-xml php8.1-curl php8.1-mysql php8.1-fpm
 
 # Move to HOME
 cd ~
@@ -74,6 +74,7 @@ yes | cp -rf ~/ubuntu_settings_backup/nvimdots_user_settings_backup/* .config/nv
 # Setup Oh-My-Tmux
 echo "Start setup tmux, using oh-my-tmux."
 git clone https://github.com/gpakosz/.tmux.git
+cp ~/ubuntu_settings_backup/.tmux.conf .tmux/.tmux.conf
 ln -s -f .tmux/.tmux.conf
 cp ~/ubuntu_settings_backup/.tmux.conf.local ~/.tmux.conf.local
 
