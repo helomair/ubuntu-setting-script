@@ -10,7 +10,9 @@ install_packages() {
 	$SUDO apt update
 	$SUDO apt install -y git vim tmux zsh powerline fonts-powerline build-essential curl make gcc g++ clang zoxide ripgrep fd-find yarn lldb python3-pip python3-venv
 	$SUDO apt install -y python3-dev docker.io cmake exuberant-ctags fzf ninja-build gettext unzip
-	$SUDO apt install -y php8.1 php8.1-dev php8.1-gd php8.1-mbstring php8.1-xml php8.1-curl php8.1-mysql php8.1-fpm
+    
+    $SUDO add-apt-repository ppa:ondrej/php
+	$SUDO apt install -y php8.4 php8.4-dev php8.4-gd php8.4-mbstring php8.4-xml php8.4-curl php8.4-mysql php8.4-fpm
 }
 
 download_configs() {
@@ -83,9 +85,10 @@ setup_tmux() {
 setup_composer() {
     echo "Start setup composer"
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    php -r "if (hash_file('sha384', 'composer-setup.php') === 'e0012edf3e80b6978849f5eff0d4b4e4c79ff1609dd1e613307e16318854d24ae64f26d17af3ef0bf7cfb710ca74755a') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+    php -r "if (hash_file('sha384', 'composer-setup.php') === 'dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6') { echo 'Installer verified'.PHP_EOL; } else { echo 'Installer corrupt'.PHP_EOL; unlink('composer-setup.php'); exit(1); }"
     php composer-setup.php
     php -r "unlink('composer-setup.php');"
+    sudo mv composer.phar /usr/local/bin/composer
 }
 
 setup_laravel() {
@@ -113,25 +116,83 @@ setup_zsh() {
 }
 
 
-main() {
-    cd ~
+declare -A PARAM_DESC=(
+    ["--vim"]="Setup Vim with plugins and configurations"
+    ["--tmux"]="Setup Tmux with oh-my-tmux and plugins"
+    ["--neovim"]="Setup Neovim with nvimdots and configurations"
+    ["--composer"]="Setup Composer globally"
+    ["--laravel"]="Setup Laravel installer globally"
+    ["--zsh"]="Setup Zsh with oh-my-zsh and plugins"
+)
 
-    download_configs
+declare -A PARAM_FUNC=(
+    ["--all"]="setup_vim setup_tmux setup_neovim setup_composer setup_laravel setup_zsh"
+    ["--vim"]="setup_vim"
+    ["--tmux"]="setup_tmux"
+    ["--neovim"]="setup_neovim"
+    ["--composer"]="setup_composer"
+    ["--laravel"]="setup_laravel"
+    ["--zsh"]="setup_zsh"
+)
 
-    install_packages
-
-    setup_vim
-    # setup_neovim
-
-    setup_tmux
-
-    setup_composer
-    setup_laravel
-
-    setup_zsh
+print_help() {
+    echo "Usage: $0 [options]"
+    echo
+    echo "Options:"
+    for key in "${!PARAM_DESC[@]}"; do
+        printf "  %-4s  %s\n" "$key" "${PARAM_DESC[$key]}"
+    done
+    echo "  -h, --help  Display this help message"
+    echo
+    echo "If no arguments are provided, will exit with an error."
 }
 
-main
+cd ~
 
+# download_configs
+# install_packages
+
+if [ ${#selected_params[@]} -eq 0 ]; then
+    echo "No valid parameters provided. Use --help for usage information."
+    exit 1
+fi
+
+selected_params=()
+while [ "$#" -gt 0 ]; do
+    has_arguments=true
+    case "$1" in
+        -h|--help)
+            print_help
+            exit 0
+            ;;
+        --*)
+            if [[ -n "${PARAM_FUNC[$1]}" ]]; then
+                echo "Running setup for $1"
+                selected_params+=("${PARAM_FUNC[$1]}")
+            else
+                echo "Unknown parameter: $1"
+                print_help
+                exit 1
+            fi
+            ;;
+        *)
+            echo "Unknown parameter: $1"
+            echo "Usage: $0 [-a] [-b] [-c] [-d] [-e]"
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+
+
+for key in "${selected_params[@]}"; do
+    if declare -F "$key" > /dev/null; then
+        echo "Executing $key"
+        "$key"
+    else
+        echo "Function $key does not exist."
+    fi
+done
 
 
