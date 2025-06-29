@@ -104,11 +104,11 @@ setup_laravel() {
 
 setup_zsh() {
     echo "Start setup zsh, using oh-my-zsh."
+    cp ~/ubuntu_settings_backup/.zshrc ~/.zshrc
     curl -Lo install.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
     sh install.sh
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-
-    cp ~/ubuntu_settings_backup/.zshrc ~/.zshrc
+ 
     exec /bin/zsh
 }
 
